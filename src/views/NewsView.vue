@@ -11,7 +11,7 @@ const showLoader = ref(false)
 const getAllNews = async () => {
     showLoader.value = true
     try {
-        const response = await axios.get(`https://jwt-firebase-vue-default-rtdb.europe-west1.firebasedatabase.app/news.json?auth=${authStore.userInfo.token}`)
+        const response = await axios.get(`https://jwt-firebase-vue-default-rtdb.europe-west1.firebasedatabase.app/news.json`)
         news.value = response.data
     } catch (err) {
         console.log(err.response)

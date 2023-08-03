@@ -37,6 +37,11 @@ export const useAuthStore = defineStore('auth', () => {
                 refreshToken: response.data.refreshToken,
                 expiresIn: response.data.expiresIn
             }
+            localStorage.setItem('userTokens', JSON.stringify({
+                token: userInfo.value.token,
+                refreshToken: userInfo.value.refreshToken,
+                expiresIn: userInfo.value.expiresIn
+            }))
             loader.value = false
             if (response.status === 200) {
                 successAuth.value = 'Registered Success'
