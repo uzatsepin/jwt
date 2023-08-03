@@ -1,8 +1,8 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const API_KEY = 'AIzaSyB_mtOBnKdoCOgEOJjeDsu0DF80jZ8az4w'
+const API_KEY = import.meta.env.VITE_API_KEY_FIREBASE
 
 export const useAuthStore = defineStore('auth', () => {
     const userInfo = ref({
@@ -12,13 +12,21 @@ export const useAuthStore = defineStore('auth', () => {
         refreshToken: '',
         expiresIn: ''
     })
-    const error = ref('')
+    const error = ref({
+        text: '',
+        id: '',
+        severity: ''
+    })
+    const successAuth = ref('')
     const loader = ref(false)
-    const signup = async (payload) => {
-        error.value = ''
-        loader.value = true
+
+    const auth = async (payload, type) => {
+        const stringUrl = type === 'signUp' ? 'signUp' : 'signInWithPassword'
+        error.value.text = ''
+        error.value.id = ''
+        ;(successAuth.value = ''), (loader.value = true)
         try {
-            let response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`, {
+            let response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:${stringUrl}?key=${API_KEY}`, {
                 ...payload,
                 returnSecurityTocken: true
             })
@@ -30,26 +38,43 @@ export const useAuthStore = defineStore('auth', () => {
                 expiresIn: response.data.expiresIn
             }
             loader.value = false
+            if (response.status === 200) {
+                successAuth.value = 'Registered Success'
+            }
         } catch (err) {
             switch (err.response.data.error.message) {
                 case 'EMAIL_EXISTS':
-                    error.value = 'Email exists'
+                    ;(error.value.text = 'Email exists'), (error.value.id = '1'), (error.value.severity = 'error')
                     break
                 case 'OPERATION_NOT_ALLOWED':
-                    error.value = 'Operation not allowed'
+                    ;(error.value.text = 'Operation not allowed'), (error.value.id = '2'), (error.value.severity = 'error')
                     break
                 case 'USER_NOT_FOUND':
-                    error.value = 'User not found'
+                    ;(error.value.text = 'User not found'), (error.value.id = '3'), (error.value.severity = 'error')
                     break
                 case 'TOO_MANY_ATTEMPTS_TRY_LATER':
-                    error.value = 'Too many attempts! Try again later'
+                    ;(error.value.text = 'Too many attempts! Try again later'), (error.value.id = '4'), (error.value.severity = 'warn')
+                    break
+                case 'ADMIN_ONLY_OPERATION':
+                    ;(error.value.text = 'Admin only operation or did not enter, anything'), (error.value.id = '5'), (error.value.severity = 'warn')
+                    break
+                case 'EMAIL_NOT_FOUND':
+                    ;(error.value.text = 'Email not found'), (error.value.id = '8'), (error.value.severity = 'error')
+                    break
+                case 'INVALID_PASSWORD':
+                    ;(error.value.text = 'Invalid password'), (error.value.id = '9'), (error.value.severity = 'error')
+                    break
+                case 'MISSING_EMAIL':
+                    ;(error.value.text = 'Missing email'), (error.value.id = '10'), (error.value.severity = 'warn')
                     break
                 default:
-                    error.value = 'Error'
+                    ;(error.value.text = 'Something wrong'), (error.value.id = '6'), (error.value.severity = 'error')
                     break
             }
+            throw error.value
+        } finally {
             loader.value = false
         }
     }
-    return { signup, userInfo, error, loader }
+    return { auth, userInfo, error, loader, successAuth }
 })
