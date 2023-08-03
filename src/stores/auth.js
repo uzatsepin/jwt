@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
+import {ref} from 'vue'
+import {defineStore} from 'pinia'
 import axios from 'axios'
 
 const API_KEY = import.meta.env.VITE_API_KEY_FIREBASE
@@ -21,14 +21,14 @@ export const useAuthStore = defineStore('auth', () => {
     const loader = ref(false)
 
     const auth = async (payload, type) => {
-        const stringUrl = type === 'signUp' ? 'signUp' : 'signInWithPassword'
+        const stringUrl = type === 'signup' ? 'signUp' : 'signInWithPassword';
         error.value.text = ''
         error.value.id = ''
         ;(successAuth.value = ''), (loader.value = true)
         try {
             let response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:${stringUrl}?key=${API_KEY}`, {
                 ...payload,
-                returnSecurityTocken: true
+                returnSecureToken: true
             })
             userInfo.value = {
                 token: response.data.idToken,
@@ -76,5 +76,5 @@ export const useAuthStore = defineStore('auth', () => {
             loader.value = false
         }
     }
-    return { auth, userInfo, error, loader, successAuth }
+    return {auth, userInfo, error, loader, successAuth}
 })
