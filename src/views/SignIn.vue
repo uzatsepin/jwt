@@ -12,18 +12,19 @@ const password = ref()
 const authStore = useAuthStore()
 const router = useRouter()
 
-const signup = async () => {
-    await authStore.auth({ email: email.value, password: password.value }, 'signUp')
+const signin = async () => {
+    await authStore.auth({ email: email.value, password: password.value })
     router.push('/news')
 }
 </script>
 
 <template>
-    <h2>Sign Up</h2>
+    <h2>Sign In</h2>
     <form class="flex flex-column gap-3">
-        <Message v-if="authStore.error.id === '5'" severity="error">{{ authStore.error.text }}</Message>
-        <Message v-if="authStore.error.id === '1'" severity="info">{{ authStore.error.text }}</Message>
-        <Message v-if="authStore.successAuth" severity="success">{{ authStore.successAuth }}</Message>
+        <Message v-if="authStore.error.id === '8'" :severity="authStore.error.severity">{{ authStore.error.text }}</Message>
+        <Message v-if="authStore.error.id === '9'" :severity="authStore.error.severity">{{ authStore.error.text }}</Message>
+        <Message v-if="authStore.error.id === '10'" :severity="authStore.error.severity">{{ authStore.error.text }}</Message>
+
         <div class="p-inputgroup flex-1">
             <span class="p-inputgroup-addon">
                 <i class="pi pi-user"></i>
@@ -38,8 +39,8 @@ const signup = async () => {
         </div>
         <LoaderComponent v-if="authStore.loader" />
         <div v-else class="flex flex-column gap-3">
-            <Button label="SignUp" @click="signup" />
-            <span>Are you ready registered? <router-link to="/signin">Sign In</router-link></span>
+            <Button label="SignIn" @click="signin" />
+            <span>Are you not registered yet? <router-link to="/signup">Sign Up</router-link></span>
         </div>
     </form>
 </template>
