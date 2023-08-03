@@ -1,2 +1,2 @@
 # jwt
-vue+pinia+jwt
+vue+pinia+jwt+firebase
