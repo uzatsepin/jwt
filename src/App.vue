@@ -10,8 +10,9 @@ import { RouterView } from 'vue-router'
 
 <style scoped>
 .container {
-    max-width: 500px;
-    margin: auto;
-    font-family: Arial, Helvetica, sans-serif;
+    max-width: 1270px;
+    padding: 0 15px;
+    margin: 0 auto;
+    font-family: Helvetica, sans-serif;
 }
 </style>
