@@ -27,6 +27,7 @@ checkUser()
         <router-link class="menu__link" to="/login" v-if="!token">Login</router-link>
         <router-link class="menu__link" to="/register" v-if="token">Register</router-link>
         <router-link class="menu__link" to="/news" v-if="token">News</router-link>
+        <router-link class="menu__link" to="/addpost" v-if="token">AddPost</router-link>
     </div>
     <div class="container">
         <RouterView/>
