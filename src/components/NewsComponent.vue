@@ -1,14 +1,23 @@
 <script setup>
+import {deletePost} from "../firebase";
+
 const props = defineProps({
     post: {
         type: Object,
         required: true,
     },
 })
+
+function onDelete(id) {
+    deletePost(id)
+}
 </script>
 
 <template>
     <div class="NewsItem">
+        <div class="NewsItem__delete" @click="onDelete(post.id)">
+            <i class="pi pi-times"></i>
+        </div>
         <div class="NewsItem__img">
             <img
                 :src="post.image"
@@ -31,6 +40,7 @@ const props = defineProps({
     padding: 12px;
     max-width: 300px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    position: relative;
 
     &__title {
         text-align: center;
@@ -61,6 +71,22 @@ const props = defineProps({
         img {
             max-width: -webkit-fill-available;
         }
+    }
+
+    &__delete {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        cursor: pointer;
+
+        & i {
+            transition: all 250ms ease-in-out;
+
+            &:hover {
+                color: red;
+            }
+        }
+
     }
 }
 </style>

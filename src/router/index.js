@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import NewsView from '../views/NewsView.vue'
 import Register from "../views/Register.vue";
 import {useAuthStore} from "../stores/auth";
+import AddPost from "../views/AddPost.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,14 @@ const router = createRouter({
             path: '/news',
             name: 'News',
             component: NewsView,
+            meta: {
+                auth: true
+            }
+        },
+        {
+            path: '/addpost',
+            name: 'AddPost',
+            component: AddPost,
             meta: {
                 auth: true
             }
